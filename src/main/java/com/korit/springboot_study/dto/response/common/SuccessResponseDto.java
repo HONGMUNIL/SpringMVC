@@ -1,20 +1,25 @@
+
 package com.korit.springboot_study.dto.response.common;
 
-
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
-@Builder
+import java.time.LocalDateTime;
+
+@Getter
 @ApiModel(description = "성공 응답 DTO")
-public class SuccessResponseDto<T> {
+public class SuccessResponseDto<T> extends ResponseDto<T> {
+    @ApiModelProperty(value = "HTTP 상태 코드", example = "200")
+    private final int status;
+    @ApiModelProperty(value = "응답 메세지", example = "요청이 성공적으로 처리되었습니다.")
+    private String message;
 
-
-    private T data;
-    private final int status = 200;
-    private final String message = "요청이 성공적으로 처리";
-    private final String timestamp = String.valueOf(System.currentTimeMillis());
-
-
+    public SuccessResponseDto(T data) {
+        super(data);
+        status = 200;
+        message = "요청이 성공적으로 처리되었습니다.";
+    }
 }
