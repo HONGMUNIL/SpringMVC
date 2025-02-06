@@ -34,10 +34,10 @@ public class StudentStudyRepository {
                 : Optional.ofNullable(foundInstructors);
     }
 
-    public Optional<Major> saveMajor(Major major)  throws DuplicateKeyException {
+    public Optional<Major> saveMajor(Major major) throws DuplicateKeyException {
         try {
-        studentStudyMapper.insertMajor(major); //이건 성공횟수
-        }catch (DuplicateKeyException e){
+            studentStudyMapper.insertMajor(major); //이건 성공횟수
+        } catch (DuplicateKeyException e) {
             throw new CustomDuplicateKeyException(e.getMessage(),
                     Map.of("majorName", "이미 존재하는 학과명입니다"));
         }
@@ -45,4 +45,28 @@ public class StudentStudyRepository {
         return Optional.ofNullable(new Major(major.getMajorId(), major.getMajorName()));//위에서 예외터지면 실행 안됨
     }
 
+    public Optional<Instructor> saveInstructor(Instructor instructor) throws DuplicateKeyException {
+        try {
+            studentStudyMapper.insertInstructor(instructor); //이건 성공횟수
+        } catch (DuplicateKeyException e) {
+            throw new CustomDuplicateKeyException(e.getMessage(),
+                    Map.of("instructorName", "이미 존재하는 교수명입니다"));
+        }
+
+        return Optional.ofNullable(new Instructor(instructor.getInstructorId(), instructor.getInstructorName()));//위에서 예외터지면 실행 안됨
+    }
+
+    public Optional<Major> updateMajor(Major major) throws DuplicateKeyException {
+        try {
+            if(studentStudyMapper.updateMaJorName(major) < 1){
+                return Optional.empty();
+            }
+        } catch (DuplicateKeyException e) {
+            throw new CustomDuplicateKeyException(
+                    e.getMessage(),
+                    Map.of("majorName", "잘못된 수정 요청입니다"));
+
+        }
+        return Optional.ofNullable(major);
+    }
 }

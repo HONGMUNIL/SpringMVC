@@ -1,6 +1,8 @@
 package com.korit.springboot_study.service;
 
+import com.korit.springboot_study.dto.request.study.ReqAddInstructorDto;
 import com.korit.springboot_study.dto.request.study.ReqAddMajorDto;
+import com.korit.springboot_study.dto.request.study.ReqUpdateMajorDto;
 import com.korit.springboot_study.dto.response.common.NotFoundResponseDto;
 import com.korit.springboot_study.dto.response.common.ResponseDto;
 import com.korit.springboot_study.dto.response.common.SuccessResponseDto;
@@ -23,27 +25,42 @@ public class StudentStudyService {
     private StudentStudyRepository studentStudyRepository;
 
     public SuccessResponseDto<List<Major>> getMajorsAll() throws NotFoundException {
-        List<Major> foundMajors = studentStudyRepository.findMajorAll()
-                .orElseThrow(() -> new NotFoundException("학과 데이터가 존재하지 않습니다."));
-
-        return new SuccessResponseDto<>(foundMajors);
+        return new SuccessResponseDto<>(
+                studentStudyRepository
+                        .findMajorAll()
+                        .orElseThrow(() -> new NotFoundException("학과 데이터가 존재하지 않습니다.")));
     }
 
-    public SuccessResponseDto<List<Instructor>> getInstructorAll() throws NotFoundException {
-        List<Instructor> foundInstructors = studentStudyRepository.findInstructorAll()
-                .orElseThrow(() -> new NotFoundException("교수 데이터가 존재하지 않습니다"));
-
-        return new SuccessResponseDto<>(foundInstructors);
+    public SuccessResponseDto<List<Instructor>> getInstructorsAll() throws NotFoundException {
+        return new SuccessResponseDto<>(
+                studentStudyRepository
+                        .findInstructorAll()
+                        .orElseThrow(() -> new NotFoundException("교수 데이터가 존재하지 않습니다.")));
     }
 
     @Transactional(rollbackFor = Exception.class)
     public SuccessResponseDto<Major> addMajor(ReqAddMajorDto reqAddMajorDto) throws DuplicateKeyException {
         return new SuccessResponseDto<>(
                 studentStudyRepository
-                        .saveMajor(new Major(0,reqAddMajorDto.getMajorName()))
-                        .orElseThrow()
+                        .saveMajor(new Major(0, reqAddMajorDto.getMajorName()))
+                        .get()
         );
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public SuccessResponseDto<Instructor> addInstructor(ReqAddInstructorDto reqAddInstructorDto) throws DuplicateKeyException {
+        return new SuccessResponseDto<>(
+                studentStudyRepository
+                        .saveInstructor(new Instructor(0, reqAddInstructorDto.getInstructorName()))
+                        .get()
+        );
+    }
 
+    @Transactional(rollbackFor = Exception.class)
+    public SuccessResponseDto<Major> modifyMajor(int majorId, ReqUpdateMajorDto reqUpdateMajorDto) throws DuplicateKeyException, NotFoundException {
+        Major modifyMajor = studentStudyRepository
+                        .updateMajor(new Major(majorId, reqUpdateMajorDto.getMajorName()))
+                         .orElseThrow(() -> new NotFoundException("해당 학과가 없네"));
+        return new SuccessResponseDto<>(modifyMajor);
+    }
 }

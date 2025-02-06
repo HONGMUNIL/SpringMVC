@@ -14,6 +14,9 @@ public interface StudentStudyMapper{
     // Major selectMajorsAll();
     List<Instructor> selectInstructorsAll();
 
-    int insertMajor(Major major);
+    int insertMajor(Major major); //건수이기 떄문에 int
+
+    int insertInstructor(Instructor instructor);
+    int updateMaJorName(Major major);
 
 }

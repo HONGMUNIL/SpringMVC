@@ -11,33 +11,42 @@
     </resultMap>
 
     <resultMap id="instructorResultMap" type="com.korit.springboot_study.entity.study.Instructor">
-        <id property="instructorId" column="instructor_id"/>
-        <result property="instructorName" column="instructor_name"/>
+        <id property="instructorId" column="instructor_id" />
+        <result property="instructorName" column="instructor_name" />
     </resultMap>
 
-    <insert id="insertMajor" keyProperty="majorId" useGeneratedKeys="true">
-        insert into
-            major_tb
-        values
-            (default, #{majorName})
+    <insert id="insertMajor" keyProperty="majorId" useGeneratedKeys="true" >
+        insert into major_tb
+        values (default, #{majorName})
     </insert>
 
+    <insert id="insertInstructor" keyProperty="instructorId" useGeneratedKeys="true">
+        insert into instructor_tb
+        values (default, #{instructorName})
+    </insert>
+
+    <update id="updateMaJorName">
+        update
+            major_tb
+        set
+            major_name = #{majorName}
+        where
+            major_id = #{majorId}
+    </update>
     <select id="selectMajorsAll" resultMap="majorResultMap">
         select
         major_id,
         major_name
         from
         major_tb
-        where
-        major_id = 100
     </select>
+
     <select id="selectInstructorsAll" resultMap="instructorResultMap">
         select
-            *
+        instructor_id,
+        instructor_name
         from
-            instructor_tb
+        instructor_tb
     </select>
-
-
 
 </mapper>
