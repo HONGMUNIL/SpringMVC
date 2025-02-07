@@ -1,6 +1,5 @@
 package com.korit.springboot_study.controller.advice;
 
-
 import com.korit.springboot_study.dto.response.common.BadRequestResponseDto;
 import com.korit.springboot_study.dto.response.common.NotFoundResponseDto;
 import com.korit.springboot_study.exception.CustomDuplicateKeyException;
@@ -36,20 +35,18 @@ public class GlobalRestControllerAdvice {
                 e.getConstraintViolations()
                         .stream()
                         .map(constraintViolation -> Map.of(constraintViolation.getPropertyPath(), constraintViolation.getMessage()))
-                        .collect(Collectors.toList())));
+                        .collect(Collectors.toList())
+        ));
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<BadRequestResponseDto<?>> validation(MethodArgumentNotValidException e){
+    public ResponseEntity<BadRequestResponseDto<?>> validation(MethodArgumentNotValidException e) {
         List<Map<String, String>> errorMap = null;
         BindingResult bindingResult = e.getBindingResult();
-        if(bindingResult.hasErrors()) {
-           errorMap =  bindingResult
-                    .getFieldErrors()
+        if (bindingResult.hasErrors()) {
+            errorMap = bindingResult.getFieldErrors()
                     .stream()
-                    .map(fieldError ->
-                            Map.of(fieldError.getField(),
-                                    fieldError.getDefaultMessage()))
+                    .map(fieldError -> Map.of(fieldError.getField(), fieldError.getDefaultMessage()))
                     .collect(Collectors.toList());
         }
         return ResponseEntity.status(400).body(new BadRequestResponseDto<>(errorMap));
