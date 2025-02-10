@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,12 +31,16 @@ public class UserRepository {
         return Optional.ofNullable(userMapper.selectById(id));
     }
 
-    public Optional<List<User>> findALl(){
+    public Optional<List<User>> findAll() {
         List<User> foundUsers = userMapper.selectAll();
         return foundUsers.isEmpty() ? Optional.empty() : Optional.of(foundUsers);
     }
 
-    public Optional<Boolean> updateUserById(User user){
+    public Optional<Boolean> updateUserById(User user) {
         return userMapper.updateUserById(user) < 1 ? Optional.empty() : Optional.of(true);
+    }
+
+    public Optional<Boolean> deleteUserById(int id) {
+        return userMapper.deleteById(id) < 1 ? Optional.empty() : Optional.of(true);
     }
 }

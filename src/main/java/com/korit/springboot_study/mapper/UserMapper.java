@@ -11,6 +11,6 @@ public interface UserMapper {
     User selectByUsername(String username);
     User selectById(int userId);
     List<User> selectAll();
-
     int updateUserById(User user);
+    int deleteById(int userId);
 }

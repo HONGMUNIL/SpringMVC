@@ -37,11 +37,6 @@ public class UserService {
         return saveUser;
     }
 
-    public List<User> getAllUsers() throws NotFoundException {
-        return userRepository.findALl()
-                .orElseThrow( () -> new NotFoundException("사용자 정보가 존재하지 않습니다"));
-    }
-
     public Boolean duplicateUsername(String username) {
         return userRepository.findByUsername(username).isPresent();
     }
@@ -51,9 +46,20 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("해당 사용자 ID는 존재하지 않습니다"));
     }
 
+    public List<User> getAllUsers() throws NotFoundException {
+        return userRepository.findAll()
+                .orElseThrow(() -> new NotFoundException("사용자 정보가 존재하지 않습니다."));
+    }
+
     @Transactional(rollbackFor = Exception.class)
-    public Boolean modifyUser(ReqModifyUserDto reqModifyUserDto) {
-        return userRepository.updateUserById(reqModifyUserDto.toUser())
-                .orElseThrow( () -> new NotFoundException("해당 사용자ID는 존재하지 않습니다"));
+    public Boolean modifyUser(int userId, ReqModifyUserDto reqModifyUserDto) throws NotFoundException {
+        return userRepository.updateUserById(reqModifyUserDto.toUser(userId))
+                .orElseThrow(() -> new NotFoundException("해당 사용자 ID는 존재하지 않습니다"));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean deleteUser(int userId) throws NotFoundException {
+        return userRepository.deleteUserById(userId)
+                .orElseThrow(() -> new NotFoundException("해당 사용자 ID는 존재하지 않습니다"));
     }
 }
