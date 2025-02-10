@@ -6,15 +6,12 @@
 
 <mapper namespace="com.korit.springboot_study.mapper.RoleMapper">
 
-
-    <insert id="insertAll">
-        insert into
-            role_tb
+    <insert id="insertAll" parameterType="list">
+        insert into role_tb
         values
         <foreach item="role" collection="roles" separator=",">
             (default, #{role.roleName})
-
         </foreach>
-
     </insert>
+
 </mapper>
