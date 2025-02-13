@@ -21,4 +21,9 @@ public class User {
     private String email;
 
     List<UserRole> userRoles;
+
+    private int isAccountNonExpired;
+    private int isAccountNonLocked;
+    private int isCredentialsNonExpired;
+    private int isEnabled;
 }
