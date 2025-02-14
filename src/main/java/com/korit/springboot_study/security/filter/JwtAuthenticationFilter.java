@@ -12,13 +12,15 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+
+
 @Component
 public class JwtAuthenticationFilter implements Filter {
-
     @Autowired
     private JwtProvider jwtProvider;
 
@@ -27,6 +29,8 @@ public class JwtAuthenticationFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
+
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
         // Bearer Token(JWT)
@@ -35,6 +39,8 @@ public class JwtAuthenticationFilter implements Filter {
         if (jwtProvider.validateToken(authorization)) {
             setJwtAuthentication(authorization);
         }
+
+        System.out.println("????");
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
